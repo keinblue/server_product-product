@@ -1,0 +1,42 @@
+{
+  "name": "Spring Boot Product Server",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "17",
+      "installGradle": "true",
+      "gradleVersion": "8.5"
+    },
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts"
+    }
+  },
+  "postCreateCommand": "npm install -g @anthropic-ai/claude-code && find /workspace -name 'gradlew' -exec chmod +x {} \\;",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "vmware.vscode-spring-boot",
+        "vscjava.vscode-spring-initializr",
+        "vscjava.vscode-spring-boot-dashboard",
+        "Pivotal.vscode-boot-dev-pack",
+        "redhat.vscode-xml",
+        "redhat.vscode-yaml",
+        "anthropic.claude-code"
+      ],
+      "settings": {
+        "java.server.launchMode": "Standard",
+        "java.configuration.updateBuildConfiguration": "automatic",
+        "spring-boot.ls.java.home": "/usr/lib/jvm/java-17-openjdk"
+      }
+    }
+  },
+  "forwardPorts": [8080, 3306],
+  "remoteUser": "vscode",
+  "remoteEnv": {
+    "SPRING_PROFILES_ACTIVE": "dev"
+  }
+}

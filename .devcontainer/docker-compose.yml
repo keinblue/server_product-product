@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspace:cached
+      - gradle-cache:/home/vscode/.gradle
+      - build-cache:/workspace/build
+      - upload-images:/workspace/uploads
+    command: sleep infinity
+    network_mode: service:mariadb
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
+  mariadb:
+    image: mariadb:10.11
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: springdb
+      MYSQL_USER: springdbuser
+      MYSQL_PASSWORD: springdbuser
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  mariadb-data:
+  gradle-cache:
+  build-cache:
+  upload-images:
